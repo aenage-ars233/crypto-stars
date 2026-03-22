@@ -1,3 +1,5 @@
+import { openModalSell, openModalBuy } from "./popup.js";
+
 // Данные пользователя
 const userProfile = document.querySelector('.user-profile');
 const userCryptoBalance = document.querySelector('#user-crypto-balance');
@@ -37,16 +39,23 @@ function createContractor(contractor) {
   userTableRow.querySelector('.users-list__table-currency').textContent = contractor.balance.currency;
   userTableRow.querySelector('.users-list__table-exchangerate').textContent = `${contractor.exchangeRate} ₽`;
   const badgesList = userTableRow.querySelector('.users-list__badges-list');
+  const contractorButton = userTableRow.querySelector('.users-list__table-btn button');
   if (contractor.status === 'seller') {
     userTableRow.querySelector('.users-list__table-cashlimit').textContent = `${contractor.minAmount} ₽ - ${Math.floor(contractor.balance.amount * contractor.exchangeRate)} ₽`;
     badgesList.innerHTML = '';
     contractor.paymentMethods.forEach((paymentMethod) => {
       badgesList.append(createBadgeItem(paymentMethod));
     });
+    contractorButton.addEventListener('click', () => {
+      openModalSell();
+    });
   }
   if (contractor.status === 'buyer') {
     userTableRow.querySelector('.users-list__table-cashlimit').textContent = `${contractor.minAmount} ₽ - ${contractor.balance.amount} ₽`;
     badgesList.innerHTML = '';
+    contractorButton.addEventListener('click', () => {
+      openModalBuy();
+    });
   }
 
   return userTableRow;
