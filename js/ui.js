@@ -1,4 +1,4 @@
-import { openModalSell, openModalBuy } from "./popup.js";
+import { openModalSell, openModalBuy } from './popup.js';
 
 // Данные пользователя
 const userProfile = document.querySelector('.user-profile');
