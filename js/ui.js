@@ -53,6 +53,11 @@ function createContractor(contractor) {
 }
 
 export function renderContractors(contractors) {
+  usersListTableBody.innerHTML = '';
+  if (!contractors) {
+    return null;
+  }
+
   const contractorsFragment = document.createDocumentFragment();
   contractors.forEach((contractor) => {
     const contractorElement = createContractor(contractor);

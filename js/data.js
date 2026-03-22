@@ -31,7 +31,7 @@ export function getUserData(onSuccess) {
   onSuccess(userData);
 }
 
-export function getContractors(onSuccess, onError) {
+export function getContractors(onSuccess) {
   const contractors = [
     {
       id: '0CsQ60w3M-RTyumLjjlfN',

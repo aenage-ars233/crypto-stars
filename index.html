@@ -190,9 +190,9 @@
                             data-delay="300">
                             <div class="tabs__controls" data-tabs="controls">
                                 <!-- При переключении с продавцов на покупателей и обратно нужно выделить активный пункт .is-active -->
-                                <button class="tabs__control btn is-active" type="button"
+                                <button class="tabs__control tabs__control--sellers btn is-active" type="button"
                                     data-tabs="control">Купить</button>
-                                <button class="tabs__control btn" type="button" data-tabs="control">Продать</button>
+                                <button class="tabs__control tabs__control--buyers btn" type="button" data-tabs="control">Продать</button>
                             </div>
                         </div>
                     </div>
@@ -208,9 +208,9 @@
                             data-delay="300">
                             <!-- При переключении с карты на список и обратно нужно выделить активный пункт .is-active -->
                             <div class="tabs__controls" data-tabs="controls">
-                                <button class="tabs__control btn is-active" type="button"
+                                <button class="tabs__control tabs__control--list btn is-active" type="button"
                                     data-tabs="control">Cписок</button>
-                                <button class="tabs__control btn" type="button" data-tabs="control">Карта</button>
+                                <button class="tabs__control tabs__control--map btn" type="button" data-tabs="control">Карта</button>
                             </div>
                         </div>
                     </div>
@@ -299,7 +299,7 @@
                 <h2 class="modal__description">Покупка криптовалюты</h2>
                 <!-- Не забудьте указать верный action-атрибут -->
                 <form class="modal-buy" method="post">
-                    <!-- 
+                    <!--
                         Обратите внимание, что всем полям для отправки на сервер нужно указать
                         атрибуты name (их список вы найдёте в техзадании), а часть полей
                         вообще отправляется скрытыми
@@ -427,7 +427,7 @@
                 <h2 class="modal__description">Продажа криптовалюты</h2>
                 <!-- Не забудьте указать верный action-атрибут -->
                 <form class="modal-sell" method="post">
-                    <!-- 
+                    <!--
                         Обратите внимание, что всем полям для отправки на сервер нужно указать
                         атрибуты name (их список вы найдёте в техзадании), а часть полей
                         вообще отправляется скрытыми
