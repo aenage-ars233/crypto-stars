@@ -1,6 +1,7 @@
 import { openModalSell, openModalBuy } from './popup.js';
 
 // Данные пользователя
+let user = {};
 const userProfile = document.querySelector('.user-profile');
 const userCryptoBalance = document.querySelector('#user-crypto-balance');
 const userFiatBalance = document.querySelector('#user-fiat-balance');
@@ -8,6 +9,7 @@ const userProfileName = document.querySelector('.user-profile__name > span');
 
 export function renderUserData(userData, isData = true) {
   if (isData) {
+    user = userData;
     const cryptoBalance = userData.balances[1];
     const moneyBalance = userData.balances[0];
 
@@ -17,6 +19,10 @@ export function renderUserData(userData, isData = true) {
   } else {
     userProfile.style.display = 'none';
   }
+}
+
+export function hideUserData() {
+  userProfile.style.display = 'none';
 }
 
 // Контрагенты
@@ -47,14 +53,14 @@ function createContractor(contractor) {
       badgesList.append(createBadgeItem(paymentMethod));
     });
     contractorButton.addEventListener('click', () => {
-      openModalSell();
+      openModalSell(contractor, user);
     });
   }
   if (contractor.status === 'buyer') {
     userTableRow.querySelector('.users-list__table-cashlimit').textContent = `${contractor.minAmount} ₽ - ${contractor.balance.amount} ₽`;
     badgesList.innerHTML = '';
     contractorButton.addEventListener('click', () => {
-      openModalBuy();
+      openModalBuy(contractor, user);
     });
   }
 

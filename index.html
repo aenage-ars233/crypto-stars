@@ -11,6 +11,7 @@
     <link rel="preload" href="fonts/exo2-semibold.woff2" as="font" crossorigin="anonymous">
     <link rel="preload" href="fonts/exo2-bold.woff2" as="font" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.min.css">
+    <link rel="stylesheet" href="leaflet/leaflet.css">
 </head>
 
 <body>
@@ -169,7 +170,7 @@
                 Для удобства обращения из JS, вы можете добавить контейнерам id
                 или уникальные классы
             -->
-            <div class="container" style="display: none">
+            <div class="container no-server" style="display: none">
                 <div class="message">
                     <span class="message__icon">
                         <svg width="60" height="60" aria-hidden="true">
@@ -183,7 +184,7 @@
                 </div>
             </div>
 
-            <div class="container">
+            <div class="container filters">
                 <div class="users-nav">
                     <div class="users-nav__tabs">
                         <div class="tabs no-transition-global tabs--toggle-buy-sell" data-tabs="parent"
@@ -252,8 +253,8 @@
             </div>
 
             <!-- При переключении на карту нужно отобразить данный контейнер -->
-            <div class="container" style="display: none">
-                <div class="map">
+            <div class="container map-container" style="display: none">
+                <div class="map" id="map" style="width: 100%; height: 400px;">
                     <!--
                         Карту нужно отрисовать в этот контейнер. Иконки для карты -
                         img/pin.svg и img/pin-verified.svg для обычных пользователей
@@ -298,7 +299,7 @@
             <div class="modal__content">
                 <h2 class="modal__description">Покупка криптовалюты</h2>
                 <!-- Не забудьте указать верный action-атрибут -->
-                <form class="modal-buy" method="post">
+                <form class="modal-buy" method="post" enctype="multipart/form-data" action="https://cryptostar.grading.htmlacademy.pro/" autocomplete="off">
                     <!--
                         Обратите внимание, что всем полям для отправки на сервер нужно указать
                         атрибуты name (их список вы найдёте в техзадании), а часть полей
@@ -315,7 +316,9 @@
                                 class="transaction-info__label">Пользователь</span><span class="transaction-info__data">
                                 <svg width="20" height="20" aria-hidden="true">
                                     <use xlink:href="#icon-star"></use>
-                                </svg>John Smith</span></p>
+                                </svg>
+                                <span>John Smith</span>
+                        </p>
                         <p class="transaction-info__item transaction-info__item--exchangerate"><span
                                 class="transaction-info__label">Курс</span><span class="transaction-info__data">9 999
                                 999&nbsp;₽</span></p>
@@ -330,10 +333,10 @@
                                         class="custom-input__unit">₽</span>
                                     <button class="btn btn--textblue custom-input__btn" type="button">обменять все
                                     </button>
-                                    <input type="number" value="" placeholder="0">
+                                    <input type="number" value="" placeholder="0" required>
                                 </label>
                                 <!-- Пример стилизации ошибки валидации -->
-                                <div class="custom-input__error">Минимальная сумма — 9 999 999 ₽</div>
+                                <div class="custom-input__error"></div>
                             </div>
                         </div>
                         <svg class="modal__container-svg" width="14" height="12" aria-hidden="true">
@@ -426,7 +429,7 @@
             <div class="modal__content">
                 <h2 class="modal__description">Продажа криптовалюты</h2>
                 <!-- Не забудьте указать верный action-атрибут -->
-                <form class="modal-sell" method="post">
+                <form class="modal-sell" method="post" enctype="multipart/form-data" action="https://cryptostar.grading.htmlacademy.pro/" autocomplete="off">
                     <!--
                         Обратите внимание, что всем полям для отправки на сервер нужно указать
                         атрибуты name (их список вы найдёте в техзадании), а часть полей
@@ -445,7 +448,7 @@
                                 <svg width="20" height="20" aria-hidden="true">
                                     <use xlink:href="#icon-star"></use>
                                 </svg>
-                                John Smith
+                                <span>John Smith</span>
                             </span>
                         </p>
                         <p class="transaction-info__item transaction-info__item--exchangerate">
@@ -464,11 +467,11 @@
                                 <label>
                                     <span class="custom-input__label">Оплата</span>
                                     <span class="custom-input__unit">KEKS</span>
-                                    <button class="btn btn--textblue custom-input__btn" type="button">обменять
+                                    <button class="btn btn--textblue custom-input__btn btn-exchange-payment" type="button">обменять
                                         все</button>
-                                    <input type="number" value="" placeholder="0">
+                                    <input class="modal__input--payment" type="number" value="" placeholder="0" required min="1" max="500" data-pristine-required-message="Обязательное поле!" data-pristine-min-message="Минимум 1 KEKS!" data-pristine-max-message="Максимум 500 KEKS!">
                                 </label>
-                                <div class="custom-input__error">Минимальная сумма — 9 999 999 ₽</div>
+                                <div class="custom-input__error"></div>
                             </div>
                         </div>
                         <svg class="modal__container-svg" width="14" height="12" aria-hidden="true">
@@ -478,9 +481,9 @@
                             <div class="custom-input">
                                 <label><span class="custom-input__label">Зачисление</span><span
                                         class="custom-input__unit">₽</span>
-                                    <button class="btn btn--textblue custom-input__btn" type="button">обменять все
+                                    <button class="btn btn--textblue custom-input__btn btn-exchange-crediting" type="button">обменять все
                                     </button>
-                                    <input type="number" value="" placeholder="0">
+                                    <input class="modal__input--crediting" type="number" value="" placeholder="0">
                                 </label>
                             </div>
                         </div>
@@ -489,7 +492,7 @@
                         <div class="modal__input-wrapper modal__input-wrapper--decorated">
                             <div class="custom-input">
                                 <label><span class="custom-input__label">Номер криптокошелька пользователя</span>
-                                    <input type="number" placeholder="08701943851-983457-2345" disabled>
+                                    <input class="custom-input__number-wallet" type="text" placeholder="08701943851-983457-2345" disabled>
                                 </label>
                             </div>
                         </div>
@@ -520,7 +523,8 @@
                         <div class="modal__input-wrapper modal__input-wrapper--decorated">
                             <div class="custom-input">
                                 <label><span class="custom-input__label">Платёжный пароль</span>
-                                    <input type="password" placeholder="Введите пароль">
+                                    <input class="custom-input__password" type="password" placeholder="Введите пароль">
+                                    <div class="custom-input__error"></div>
                                 </label>
                             </div>
                         </div>
@@ -596,9 +600,9 @@
                 <span>Неопознанный енот</span>
             </span>
             <p class="user-card__cash-item"><span class="user-card__cash-label">Валюта</span><span
-                    class="user-card__cash-data">KEKS</span></p>
+                    class="user-card__cash-data user-card__cash-data--currency">KEKS</span></p>
             <p class="user-card__cash-item"><span class="user-card__cash-label">Курс</span><span
-                    class="user-card__cash-data">9 999 999 ₽</span></p>
+                    class="user-card__cash-data user-card__cash-data--exchangerate">9 999 999 ₽</span></p>
             <p class="user-card__cash-item"><span class="user-card__cash-label">Лимит</span><span
                     class="user-card__cash-data">9 900 ₽ – 9 900 000 000 ₽</span></p>
             <ul class="user-card__badges-list">
@@ -612,6 +616,8 @@
     </template>
 
     <script src="pristine/pristine.min.js"></script>
+    <script src="leaflet/leaflet.js.map"></script>
+    <script src="leaflet/leaflet.js"></script>
     <script src="./js/main.js" type="module"></script>
 
 </body>

@@ -1,4 +1,5 @@
 import { renderContractors } from './ui.js';
+import { showMap, hideMap } from './map.js';
 
 let allContractors = [];
 
@@ -11,6 +12,7 @@ const state = {
 export function filterContractors() {
   let filteredContractors = allContractors.slice();
   renderContractors();
+  hideMap();
 
   if (state.type === 'sell') {
     filteredContractors = filteredContractors.filter((contractor) => contractor.status === 'seller');
@@ -27,7 +29,18 @@ export function filterContractors() {
     renderContractors(filteredContractors);
   }
   if (state.view === 'map') {
-    console.log('Выбрана карта!');
+    filteredContractors = filteredContractors.filter((contractor) => {
+      let isCash = false;
+      for (let i = 0; i < contractor.paymentMethods.length; i++) {
+        if (contractor.paymentMethods[i].provider === 'Cash in person') {
+          isCash = true;
+          break;
+        }
+      }
+      return isCash;
+    });
+    console.log(filteredContractors);
+    showMap(filteredContractors);
   }
 }
 
@@ -73,4 +86,14 @@ tabControlMap.addEventListener('click', () => {
 export function setAllContractors(contractors) {
   allContractors = contractors;
   filterContractors();
+}
+
+// Сервер недоступен
+const filtersElement = document.querySelector('.filters');
+const usersList = document.querySelector('.users-list');
+const noServerElement = document.querySelector('.no-server');
+export function showNoServer() {
+  filtersElement.remove();
+  usersList.remove();
+  noServerElement.style.display = 'block';
 }
